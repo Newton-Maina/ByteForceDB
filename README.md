@@ -1,12 +1,15 @@
 # ByteForce RDBMS
 
+**My logic to creating this:** [How I Crafted](./How_I_Crafted.md)
+
 ![Architecture Diagram](assets/logic.png)
 
-**ByteForce** is a lightweight, pure-Python Relational Database Management System (RDBMS) designed for educational purposes and rapid prototyping. It provides a functional SQL engine that supports parsing, execution planning, indexing, and persistent storage, making it an excellent tool for understanding how databases work under the hood.
+**ByteForce** is a lightweight, pure-Python Relational Database Management System (RDBMS) designed for rapid prototyping. It provides a functional SQL engine that supports parsing, execution planning, indexing, and persistent storage, making it an excellent tool for understanding how databases work under the hood.
 
 ## System Architecture
 
 The system follows a classic layered database architecture, separating concerns between parsing, execution, and storage.
+
 
 ```mermaid
 graph TD
