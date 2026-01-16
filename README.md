@@ -60,12 +60,25 @@ Simply double-click **`run.bat`** (or run it from cmd/powershell).
 2.  If not, it creates one and installs all dependencies from `requirements.txt`.
 3.  Launches the ByteForce CLI.
 
-### 2. Run Tests
-Double-click **`test.bat`**.
+### Meta Commands
+-   `.tables`: List all tables.
+-   `.schema <table>`: Show the structure of a table (columns, types, constraints).
+-   `.seed <table> <count>`: Automatically insert `<count>` random rows for performance testing.
+-   `.export <table> <file.csv>`: Export a table's data to a CSV file.
+-   `.help`: Show available commands.
+-   `.exit`: Quit the application.
 
-*What this does:*
-1.  Ensures the environment is set up.
-2.  Runs the comprehensive test suite (`tests/test_core_features.py`) using `pytest`.
+## Development Workflow
+
+### Code Quality
+This project enforces **PEP 8** standards using the `Black` formatter. To ensure code quality, run:
+```bash
+lint.bat
+```
+
+### Running Tests
+Double-click `test.bat` (Windows) or execute:
+
 
 ## Manual Installation
 

@@ -17,3 +17,30 @@
 
 # 2026-01-16 10:40:41.103442
 +.help
+
+# 2026-01-16 11:25:45.013975
++SELECT name, amount FROM users JOIN orders ON id = user_id
+
+# 2026-01-16 11:40:58.688294
++CREATE TABLE users (id INTEGER PRIMARY KEY, name TEXT, age INTEGER, balance FLOAT)
+
+# 2026-01-16 11:41:20.216220
++.seed users 1000
+
+# 2026-01-16 11:42:50.471081
++SELECT name, amount FROM users JOIN orders ON id = user_id
+
+# 2026-01-16 11:42:52.886650
++CREATE TABLE users (id INTEGER PRIMARY KEY, name TEXT, age INTEGER, balance FLOAT)
+
+# 2026-01-16 11:42:54.926491
++.seed users 1000
+
+# 2026-01-16 11:43:31.470756
++SELECT * FROM users
+
+# 2026-01-16 11:43:47.774717
++SELECT * FROM users WHERE name = 'some_random_name'
+
+# 2026-01-16 11:44:15.765511
++SELECT * FROM users WHERE name = 'BWxvZUtr'
