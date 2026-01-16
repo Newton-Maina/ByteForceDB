@@ -28,7 +28,7 @@ graph TD
         Storage -.->|Manage| Index
     end
     
-    Storage -->|Serialize (Pickle)| Disk[(File System /data)]
+    Storage -->|Serialize with Pickle| Disk[("File System /data")]
 ```
 
 ## Features
