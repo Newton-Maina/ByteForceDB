@@ -53,7 +53,7 @@ Writing code that works is only half the battle; writing code that *others can r
 *   **Documentation**: I added Mermaid diagrams and Docstrings because I believe a project isn't finished until it's documented.
 
 ## 5. Limitations & Self-Reflection (The "1TB" Problem)
-While testing, I realized a significant edge case I didn't solve for in this prototype: **Memory Management**.
+This just popped in my mind: While testing, I realized a significant edge case I didn't solve for in this prototype: **Memory Management**.
 
 Currently, the `StorageEngine` uses Python's `pickle` module to serialize the entire `Table` object. This means if the database grew to **1TB**, it would attempt to load all 1TB into my 12GB of RAM, immediately crashing the system (Out of Memory).
 
