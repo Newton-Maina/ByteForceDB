@@ -55,7 +55,7 @@ Writing code that works is only half the battle; writing code that *others can r
 ## 5. Limitations & Self-Reflection (The "1TB" Problem)
 This just popped in my mind: While testing, I realized a significant edge case I didn't solve for in this prototype: **Memory Management**.
 
-Currently, the `StorageEngine` uses Python's `pickle` module to serialize the entire `Table` object. This means if the database grew to **1TB**, it would attempt to load all 1TB into my 12GB of RAM, immediately crashing the system (Out of Memory).
+Currently, the `StorageEngine` uses Python's `pickle` module to serialize the entire `Table` object. This means if the database grew to **1TB**, "what are the chances but who knows - my dbs only grow to megabytes hehe" it would attempt to load all 1TB into my 12GB of RAM, immediately crashing the system (Out of Memory).
 
 **How I would fix this in V2:**
 Instead of loading the whole file, I would implement a **Page-Based Storage Engine**:
