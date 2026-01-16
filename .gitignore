@@ -1,0 +1,23 @@
+# Environments
+venv/
+env/
+.env
+
+# Python cache
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Pytest
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Database files
+data/
+*.db
+
+# Distribution / Packaging
+dist/
+build/
+*.egg-info/

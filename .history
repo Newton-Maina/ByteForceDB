@@ -1,0 +1,19 @@
+
+# 2026-01-16 10:12:48.723719
++CREATE TABLE users (id INTEGER PRIMARY KEY, name TEXT)
+
+# 2026-01-16 10:13:01.322088
++INSERT INTO users VALUES (1, 'Alice')
+
+# 2026-01-16 10:13:12.777046
++CREATE TABLE orders (oid INTEGER PRIMARY KEY, user_id     
++     INTEGER, amount FLOAT)
+
+# 2026-01-16 10:13:19.328881
++INSERT INTO orders VALUES (101, 1, 55.5)
+
+# 2026-01-16 10:13:27.264305
++SELECT name, amount FROM users JOIN orders ON id = user_id
+
+# 2026-01-16 10:40:41.103442
++.help
