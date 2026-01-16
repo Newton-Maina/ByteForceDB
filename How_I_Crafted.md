@@ -6,10 +6,10 @@ This document outlines my thought process, and the decisions I made while buildi
 Mai motive was that I wanted to simulate a real-world database development experience.
 
 *   **DBeaver & Real-World Context**: I regularly use tools like DBeaver to interact with Postgres and MySQL. I noticed how tedious it can be to manually `INSERT` rows one by one for testing. This observation directly inspired the `.seed` command (see Section 3).
-*   **Python Stack**: I chose Python 3.9+ because its standard library is rich, and libraries like `lark` (for parsing) and `rich` (for UI) allow for rapid development of complex systems without reinventing the wheel.
+*   **Python Stack**: I chose Python 3.9+ because its standard library is rich, and libraries like `lark` (for parsing) and `rich` (for UI) allow for rapid development of complex systems without reinventing the wheel. Apparently Rust is or was the top recommendation to working on this but i had to work with logic "engraved in my fingertips hehe".
 
 ## 2. Iterative Development (TDD Approach)
-I followed a strict Test-Driven Development (TDD) cycle to ensure stability at every layer.
+I followed a Test-Driven Development (TDD) cycle to ensure stability at every layer.
 
 1.  **Phase 1: The Foundation (Basic CRUD)**
     *   *Goal*: Can I store data?
