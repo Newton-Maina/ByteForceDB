@@ -88,7 +88,7 @@ Double-click `test.bat` (Windows) or execute:
 export PYTHONPATH=.  # Linux/Mac
 set PYTHONPATH=.     # Windows CMD
 
-pytest tests/test_core_features.py
+pytest tests/
 ```
 
 ![Test Suite Output](assets/test.png)

@@ -20,5 +20,5 @@ if not exist "venv" (
 
 :: Run the tests
 set PYTHONPATH=.
-venv\Scripts\pytest.exe tests/test_core_features.py
+venv\Scripts\pytest.exe tests/
 pause
