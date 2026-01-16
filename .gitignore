@@ -21,4 +21,7 @@ data/
 dist/
 build/
 *.egg-info/
+
+# Documentation
+*.pdf
 Documentation.md
