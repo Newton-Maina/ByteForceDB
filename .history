@@ -86,3 +86,57 @@
 
 # 2026-01-16 12:01:09.796029
 +clear
+
+# 2026-01-16 12:28:39.626641
++.help
+
+# 2026-01-16 12:28:49.746125
++.tables
+
+# 2026-01-16 12:28:57.690150
++SELECT name, amount FROM users JOIN orders ON id = user_id
+
+# 2026-01-16 12:29:03.106186
++CREATE TABLE users (id INTEGER PRIMARY KEY, name TEXT, age INTEGER, balance FLOAT)
+
+# 2026-01-16 12:29:11.186844
++.schema orders
+
+# 2026-01-16 12:29:16.746151
++SELECT * FROM users WHERE name = 'BWxvZUtr'
+
+# 2026-01-16 12:30:30.410306
++SELECT * FROM users LIMIT 5
+
+# 2026-01-16 12:39:29.865010
++.help
+
+# 2026-01-16 12:39:35.272828
++SELECT name, amount FROM users JOIN orders ON id = user_id
+
+# 2026-01-16 12:39:40.352185
++SELECT * FROM users LIMIT 5
+
+# 2026-01-16 12:39:43.720203
++.schema orders
+
+# 2026-01-16 12:39:49.440115
++CREATE TABLE users (id INTEGER PRIMARY KEY, name TEXT, age INTEGER, balance FLOAT)
+
+# 2026-01-16 12:40:04.752290
++SELECT * FROM users WHERE name = 'BWxvZUtr'
+
+# 2026-01-16 12:41:04.816817
++.help
+
+# 2026-01-16 12:41:09.120348
++SELECT name, amount FROM users JOIN orders ON id = user_id
+
+# 2026-01-16 12:41:11.695856
++CREATE TABLE users (id INTEGER PRIMARY KEY, name TEXT, age INTEGER, balance FLOAT)
+
+# 2026-01-16 12:41:14.847713
++.schema orders
+
+# 2026-01-16 12:41:19.919896
++SELECT * FROM users LIMIT 5

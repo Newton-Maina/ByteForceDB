@@ -1,5 +1,7 @@
 # ByteForce RDBMS
 
+![Architecture Diagram](assets/logic.png)
+
 **ByteForce** is a lightweight, pure-Python Relational Database Management System (RDBMS) designed for educational purposes and rapid prototyping. It provides a functional SQL engine that supports parsing, execution planning, indexing, and persistent storage, making it an excellent tool for understanding how databases work under the hood.
 
 ## System Architecture
@@ -39,6 +41,7 @@ graph TD
     -   **Hash Indexing**: O(1) lookups for equality searches.
     -   **Query Optimization**: Automatically utilizes indices for `WHERE` clauses.
 -   **Relational Algebra**: Supports `INNER JOIN` operations to combine data across tables.
+-   **Security**: Supports **Parameterized Queries** (`?` placeholders) to prevent SQL Injection attacks ....hehe.
 -   **Data Integrity**: Enforces `PRIMARY KEY`, `UNIQUE`, and `NOT NULL` constraints.
 -   **Persistence**: Automatic serialization to disk, ensuring data survives restarts.
 -   **Rich REPL**: A beautiful, interactive command-line interface with syntax highlighting, history, and formatted table output.
@@ -76,18 +79,27 @@ This project enforces **PEP 8** standards using the `Black` formatter. To ensure
 lint.bat
 ```
 
+![Linting Output](assets/lint.png)
+
 ### Running Tests
 Double-click `test.bat` (Windows) or execute:
+```bash
+# Set PYTHONPATH to current directory
+export PYTHONPATH=.  # Linux/Mac
+set PYTHONPATH=.     # Windows CMD
 
+pytest tests/test_core_features.py
+```
 
+![Test Suite Output](assets/test.png)
 ## Manual Installation
 
 If you are on a non-Windows system or prefer manual control:
 
 1.  **Clone the repository**:
     ```bash
-    git clone https://github.com/yourusername/byteforce.git
-    cd byteforce
+    git clone https://github.com/Newton-Maina/ByteForceDB.git
+    cd ByteForceDB
     ```
 
 2.  **Create and Activate Virtual Environment**:

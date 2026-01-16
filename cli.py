@@ -25,6 +25,12 @@ sql_completer = WordCompleter([
 ], ignore_case=True)
 
 def main():
+    """
+    The main entry point for the ByteForce CLI.
+    
+    Sets up the database connection, configures the prompt session with 
+    syntax highlighting and auto-completion, and enters the main REPL loop.
+    """
     db = ByteForceDB()
     
     # Setup history and session with "Pro" features
@@ -83,6 +89,14 @@ def main():
             console.print(f"[red]Error:[/red] {str(e)}")
 
 def handle_meta_command(command, db):
+    """
+    Handles dot-commands (meta commands) that interact with the database system
+    rather than the data itself.
+    
+    Args:
+        command (str): The command string (e.g., ".help", ".seed users 100").
+        db (ByteForceDB): The database instance.
+    """
     parts = command.split()
     cmd = parts[0]
 
@@ -123,6 +137,14 @@ def handle_meta_command(command, db):
         console.print(f"Unknown command or wrong arguments: {command}")
 
 def generate_data(db, table_name, count):
+    """
+    Generates random dummy data for a table.
+    
+    Args:
+        db (ByteForceDB): The database instance.
+        table_name (str): The target table.
+        count (int): Number of rows to generate.
+    """
     table = db.storage.get_table(table_name)
     if not table:
         console.print(f"[red]Table {table_name} not found.[/red]")
@@ -159,6 +181,14 @@ def generate_data(db, table_name, count):
     console.print(f"[green]Successfully seeded {successful} rows in {time.time() - start:.2f}s.[/green]")
 
 def export_data(db, table_name, filename):
+    """
+    Exports a table's data to a CSV file.
+    
+    Args:
+        db (ByteForceDB): The database instance.
+        table_name (str): The source table.
+        filename (str): The output CSV path.
+    """
     table = db.storage.get_table(table_name)
     if not table:
         console.print(f"[red]Table {table_name} not found.[/red]")
@@ -178,6 +208,12 @@ def export_data(db, table_name, filename):
         console.print(f"[red]Export failed: {e}[/red]")
 
 def display_result(result):
+    """
+    Formats and prints the result of a SQL query using Rich tables.
+    
+    Args:
+        result: The result from the database (list of dicts or status string).
+    """
     if isinstance(result, str):
         console.print(result)
     elif isinstance(result, list):

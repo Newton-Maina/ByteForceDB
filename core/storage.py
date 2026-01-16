@@ -3,16 +3,18 @@ import os
 from typing import Dict, Optional, List
 from .models import Table
 
+
 class StorageEngine:
     """
     Manages the persistence of database tables to disk.
-    
+
     Each table is serialized as a separate .db file using Python's pickle module.
     """
+
     def __init__(self, data_dir: str = "data"):
         """
         Initialize the storage engine.
-        
+
         Args:
             data_dir: The directory where table files will be stored.
         """
@@ -24,10 +26,10 @@ class StorageEngine:
     def create_table(self, table: Table):
         """
         Registers a new table in the system and persists it.
-        
+
         Args:
             table: The Table object to create.
-            
+
         Raises:
             ValueError: If a table with the same name already exists.
         """
@@ -39,10 +41,10 @@ class StorageEngine:
     def get_table(self, name: str) -> Optional[Table]:
         """
         Retrieves a table by name.
-        
+
         Args:
             name: The name of the table.
-            
+
         Returns:
             Table: The table object, or None if not found.
         """
@@ -51,7 +53,7 @@ class StorageEngine:
     def save_table(self, name: str):
         """
         Serializes and saves a specific table to disk.
-        
+
         Args:
             name: The name of the table to save.
         """
