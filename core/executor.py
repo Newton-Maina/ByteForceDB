@@ -148,6 +148,11 @@ class ExecutionEngine:
                 for row in results
             ]
 
+        # Apply LIMIT
+        limit = plan.get("limit")
+        if limit is not None:
+            results = results[:limit]
+
         return results
 
     def _execute_update(self, plan: Dict[str, Any]):
