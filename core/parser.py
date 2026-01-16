@@ -58,8 +58,8 @@ sql_grammar = r"""
           | "TRUE"          -> true
           | "FALSE"         -> false
           | "NULL"          -> null
+          | "?"             -> placeholder
 
-    # --- Terminals ---
     STRING: "'" /[^']*/ "'"
     SIGNED_FLOAT: /[-+]?((\d+\.\d*|\.\d+)([eE][-+]?\d+)?|\d+[eE][-+]?\d+)/
     %import common.CNAME
@@ -243,6 +243,7 @@ class SQLTransformer(Transformer):
     def true(self, _): return True
     def false(self, _): return False
     def null(self, _): return None
+    def placeholder(self, _): return {"type": "placeholder"}
 
 class SQLParser:
     """
