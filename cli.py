@@ -47,8 +47,8 @@ def main():
     )
 
     console.print("="*50)
-    console.print("[bold green]ByteForce RDBMS - Junior Developer Assessment[/bold green]")
-    console.print("[dim]Candidate: Newton Maina[/dim]")
+    console.print("[bold green]ByteForce RDBMS - Technical Assessment[/bold green]")
+    console.print("[dim]Newton Maina[/dim]")
     console.print("="*50)
     console.print("Type [bold].help[/bold] for commands or [bold].exit[/bold] to quit.")
     console.print("")
@@ -58,7 +58,7 @@ def main():
             # Add a bottom toolbar
             text = session.prompt(
                 'ByteForce> ',
-                bottom_toolbar=" [F4] Toggle History | [Tab] Autocomplete | Newton Maina @ Pesapal "
+                bottom_toolbar=" [F4] Toggle History | [Tab] Autocomplete | Newton Maina @ Pesapal Assessment "
             )
             
             if not text.strip():
