@@ -21,3 +21,4 @@ data/
 dist/
 build/
 *.egg-info/
+Documentation.md
