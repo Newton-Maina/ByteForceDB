@@ -37,7 +37,8 @@ sql_grammar = r"""
     delete_stmt: "DELETE" "FROM" CNAME [where_clause]
     
     # --- DQL: Data Query Language ---
-    select_stmt: "SELECT" (ASTERISK | column_list) "FROM" CNAME [join_clause] [where_clause]
+    select_stmt: "SELECT" (ASTERISK | column_list) "FROM" CNAME [join_clause] [where_clause] [limit_clause]
+    limit_clause: "LIMIT" INT
     join_clause: "JOIN" CNAME "ON" condition
     column_list: "(" CNAME ("," CNAME)* ")" -> col_list_paren
                | CNAME ("," CNAME)*        -> col_list_plain
@@ -184,19 +185,30 @@ class SQLTransformer(Transformer):
         table_name = str(items[1])
         join = None
         where = None
+        limit = None
+        
         remaining = items[2:]
         for item in remaining:
+            if item is None:
+                continue
             if isinstance(item, dict) and "join_table" in item:
                 join = item
+            elif isinstance(item, dict) and "limit" in item:
+                limit = item["limit"]
             else:
                 where = item
+                
         return {
             "type": "select",
             "table_name": table_name,
             "columns": columns,
             "join": join,
-            "where": where
+            "where": where,
+            "limit": limit
         }
+
+    def limit_clause(self, items):
+        return {"limit": int(items[0])}
 
     def join_clause(self, items):
         return {

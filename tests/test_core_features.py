@@ -87,3 +87,13 @@ def test_delete(db):
     db.execute("DELETE FROM users WHERE id = 1")
     res = db.execute("SELECT * FROM users")
     assert len(res) == 0
+
+def test_limit(db):
+    db.execute("CREATE TABLE users (id INTEGER PRIMARY KEY, name TEXT)")
+    for i in range(10):
+        db.execute(f"INSERT INTO users VALUES ({i}, 'User {i}')")
+    
+    res = db.execute("SELECT * FROM users LIMIT 5")
+    assert len(res) == 5
+    assert res[0]['id'] == 0
+    assert res[4]['id'] == 4
