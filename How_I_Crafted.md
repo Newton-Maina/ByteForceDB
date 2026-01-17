@@ -65,3 +65,10 @@ Instead of loading the whole file, I would implement a **Page-Based Storage Engi
 
 ## 6. Conclusion
 Building ByteForce was an exercise in understanding the layers of abstraction that make modern software possible. From parsing text to managing disk I/O, every component had to be carefully crafted and tested.
+
+## 7. The Java Port
+After building the Python prototype, I decided to challenge myself by porting the entire system to **Java**. This exercise highlighted the trade-offs between dynamic and static typing.
+
+*   **Strict Typing**: While Python's `Dict[str, Any]` offered flexibility, Java required a rigid `Map<String, Object>` structure with explicit type casting. This caught several potential bugs at compile time that Python would only catch at runtime.
+*   **ANTLR4 vs Lark**: Moving from Lark to ANTLR4 required defining a formal grammar file (`.g4`). This was more verbose but resulted in a much more robust and standard parser.
+*   **Maven**: Setting up the build pipeline with Maven allowed for easy dependency management and the creation of a standalone "Fat JAR" for the CLI.

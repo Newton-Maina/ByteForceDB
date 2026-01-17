@@ -2,25 +2,50 @@
 venv/
 env/
 .env
+python/venv/
 
 # Python cache
 __pycache__/
 *.py[cod]
 *$py.class
+python/**/__pycache__/
 
 # Pytest
 .pytest_cache/
 .coverage
 htmlcov/
+python/.pytest_cache/
+
+# Java / Maven
+target/
+java/target/
+*.class
+*.jar
+*.war
+*.ear
+
+# IDEs
+.idea/
+.vscode/
+*.swp
+*.swo
 
 # Database files
 data/
+python/data/
+java/data/
 *.db
 
 # Distribution / Packaging
 dist/
 build/
 *.egg-info/
+
+# CLI History
+.history
+.history_java
+python/.history
+java/.history_java
 
 # Documentation
 *.pdf
