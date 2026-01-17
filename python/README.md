@@ -1,15 +1,17 @@
-# ByteForce RDBMS (Python Edition)
+# ByteForceDB - Python Edition
 
-**My logic to creating this:** [How I Crafted](../How_I_Crafted.md)
+> **Engineering Logic:** [How I Crafted ByteForceDB](../How_I_Crafted.md)
 
 ![Architecture Diagram](assets/logic.png)
+*Figure 1: High-level architectural diagram of the ByteForce engine.*
 
 **ByteForce** is a lightweight, pure-Python Relational Database Management System (RDBMS) designed for rapid prototyping. It provides a functional SQL engine that supports parsing, execution planning, indexing, and persistent storage, making it an excellent tool for understanding how databases work under the hood.
+
+---
 
 ## System Architecture
 
 The system follows a classic layered database architecture, separating concerns between parsing, execution, and storage.
-
 
 ```mermaid
 graph TD
@@ -36,7 +38,9 @@ graph TD
     Storage -->|Serialize with Pickle| Disk[("File System /data")]
 ```
 
-## Features
+---
+
+## Key Features
 
 -   **SQL Interface**: Support for standard DDL and DML operations (`CREATE`, `INSERT`, `SELECT`, `UPDATE`, `DELETE`).
 -   **Intelligent Parsing**: robust SQL parsing using the **Lark** parsing library.
@@ -44,15 +48,19 @@ graph TD
     -   **Hash Indexing**: O(1) lookups for equality searches.
     -   **Query Optimization**: Automatically utilizes indices for `WHERE` clauses.
 -   **Relational Algebra**: Supports `INNER JOIN` operations to combine data across tables.
--   **Security**: Supports **Parameterized Queries** (`?` placeholders) to prevent SQL Injection attacks ....hehe.
+-   **Security**: Supports **Parameterized Queries** (`?` placeholders) to prevent SQL Injection attacks.
 -   **Data Integrity**: Enforces `PRIMARY KEY`, `UNIQUE`, and `NOT NULL` constraints.
 -   **Persistence**: Automatic serialization to disk, ensuring data survives restarts.
 -   **Rich REPL**: A beautiful, interactive command-line interface with syntax highlighting, history, and formatted table output.
+
+---
 
 ## Prerequisites
 
 -   **Operating System**: Windows (Batch scripts provided), Linux, or macOS.
 -   **Python**: Version **3.9** or higher.
+
+---
 
 ## Quick Start (Automatic Setup)
 
@@ -74,27 +82,8 @@ Simply double-click **`run.bat`** (or run it from cmd/powershell).
 -   `.help`: Show available commands.
 -   `.exit`: Quit the application.
 
-## Development Workflow
+---
 
-### Code Quality
-This project enforces **PEP 8** standards using the `Black` formatter. To ensure code quality, run:
-```bash
-lint.bat
-```
-
-![Linting Output](assets/lint.png)
-
-### Running Tests
-Double-click `test.bat` (Windows) or execute:
-```bash
-# Set PYTHONPATH to current directory
-export PYTHONPATH=.  # Linux/Mac
-set PYTHONPATH=.     # Windows CMD
-
-pytest tests/
-```
-
-![Test Suite Output](assets/test.png)
 ## Manual Installation
 
 If you are on a non-Windows system or prefer manual control:
@@ -130,6 +119,34 @@ If you are on a non-Windows system or prefer manual control:
     python cli.py
     ```
 
+---
+
+## Development Workflow
+
+### Code Quality
+This project enforces **PEP 8** standards using the `Black` formatter. To ensure code quality, run:
+```bash
+lint.bat
+```
+
+![Linting Output](assets/lint.png)
+*Output of the Black formatter ensuring code style compliance.*
+
+### Running Tests
+Double-click `test.bat` (Windows) or execute:
+```bash
+# Set PYTHONPATH to current directory
+export PYTHONPATH=.  # Linux/Mac
+set PYTHONPATH=.     # Windows CMD
+
+pytest tests/
+```
+
+![Test Suite Output](assets/test.png)
+*Pytest suite results verifying system correctness.*
+
+---
+
 ## Usage Example
 
 ```sql
@@ -154,6 +171,8 @@ CREATE TABLE orders (oid INTEGER PRIMARY KEY, user_id INTEGER, amount FLOAT)
 INSERT INTO orders VALUES (100, 1, 50.5)
 SELECT name, amount FROM users JOIN orders ON id = user_id
 ```
+
+---
 
 ## Project Structure
 

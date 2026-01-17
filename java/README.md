@@ -1,14 +1,12 @@
-# ByteForceDB - Java Edition ☕
+# ByteForceDB - Java Edition
 
-**My logic to creating this:** [How I Crafted](../How_I_Crafted.md)
+> **Engineering Logic:** [How I Crafted ByteForceDB](../How_I_Crafted.md)
 
-Welcome to the **Java Edition** of ByteForce. While the Python version focuses on being dynamic and readable, this implementation is all about **strict engineering rigor**. I built this port to demonstrate how type safety, compilation, and robust tooling can catch errors *before* the code even runs.
-
-If you want to see how a database engine handles strict schemas and structured execution plans, you are in the right place.
+This is the **strict, statically-typed port** of the ByteForce RDBMS. While the Python version focuses on logical clarity, this Java implementation focuses on **engineering rigor, type safety, and build tooling**.
 
 ---
 
-## 🏗️ System Architecture
+## System Architecture
 
 The Java implementation adheres to the same logical architecture as the Python version but leverages Java's type system and ecosystem for robustness.
 
@@ -34,12 +32,12 @@ graph TD
         Storage -.->|Manage| Index
     end
     
-    Storage -->|Serialize (ObjectOutputStream)| Disk[("File System")]
+    Storage -->|"Serialize (ObjectOutputStream)"| Disk[("File System")]
 ```
 
 ---
 
-## ✨ Key Features
+## Key Features
 
 -   **SQL Interface**: Support for standard DDL and DML operations (`CREATE`, `INSERT`, `SELECT`, `UPDATE`, `DELETE`).
 -   **Strict Parsing**: Robust SQL parsing using **ANTLR4** (LL(*) parser generator), preventing ambiguity.
@@ -58,27 +56,37 @@ graph TD
 
 ---
 
-## 🚀 Getting Started
+## Prerequisites
+*   **Java**: JDK 21 or higher.
+*   **Maven**: 3.6 or higher.
 
-### Prerequisites
-*   **Java**: JDK 21+
-*   **Maven**: 3.6+
+---
 
-### Option A: Automated Setup (Windows) ⚡
-I've included batch scripts to make your life easier. Just click and go!
+## Quick Start (Automated Setup)
+We provide batch scripts to verify the environment, build the project, and run it with a single click.
 
 *   **Run**: Double-click `run.bat` (Compiles and starts the interactive CLI).
+    
+    ![Run Script](src/assets/java-run.png)
+    *The interactive CLI running in a Windows terminal.*
+
 *   **Test**: Double-click `test.bat` (Runs the JUnit test suite).
 
-### Option B: Manual Workflow 🛠️
+---
 
-#### 1. Build the Project
+## Manual Installation
+
+If you prefer to run commands manually or are on a non-Windows system:
+
+### 1. Build the Project
 This step generates the ANTLR sources, compiles the code, and packages the JAR.
 ```bash
 mvn clean install
 ```
+![Build Process](src/assets/java-build.png)
+*Maven build output showing successful compilation and packaging.*
 
-#### 2. Run the Database
+### 2. Run the Database
 Launch the interactive shell using the shaded JAR (Fat JAR):
 ```bash
 java -jar target/byteforce-db-1.0-SNAPSHOT-jar-with-dependencies.jar
@@ -86,7 +94,7 @@ java -jar target/byteforce-db-1.0-SNAPSHOT-jar-with-dependencies.jar
 
 ---
 
-## 💡 Usage Guide
+## Usage Guide
 
 ### Meta Commands
 ByteForce CLI supports special commands for managing the database environment:
@@ -126,33 +134,31 @@ SELECT name, amount FROM users JOIN orders ON id = user_id
 
 ---
 
-## 🛠️ Development Workflow
+## Development Workflow
 
 ### Code Quality (Linting)
 We enforce code style (Google Java Format) automatically using the Spotless/FMT plugin.
 ```bash
 mvn com.spotify.fmt:fmt-maven-plugin:format
+# or simply
+lint.bat
 ```
+![Linting Output](src/assets/java-lint.png)
+*Spotless plugin ensuring code formatting compliance.*
 
 ### Running Tests
 We use **JUnit 5** for unit testing core database features.
 ```bash
 mvn test
+# or simply
+test.bat
 ```
+![Test Output](src/assets/java-tests.png)
+*JUnit 5 test results verifying database functionality.*
 
 ---
 
-## 🆚 Comparison: Java vs. Python Implementation
-
-| Feature | Java Edition | Python Edition |
-| :--- | :--- | :--- |
-| **Parsing** | **ANTLR4** (Generated code, strict grammar) | **Lark** (Dynamic EBNF parsing) |
-| **Typing** | **Static** (Compile-time checks) | **Dynamic** (Runtime duck typing) |
-| **Data Models** | Classes (`Table`, `Column`, `DataType` Enum) | Dictionaries & Dataclasses |
-| **Safety** | High (Compiler catches type errors) | Moderate (Relies on extensive testing) |
-| **Boilerplate** | High (Getters/Setters, Visitors, Factories) | Low (Concise logic) |
-
-## 📂 Project Structure
+## Project Structure
 
 ```text
 java/

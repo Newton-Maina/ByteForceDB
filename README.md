@@ -1,38 +1,30 @@
-# ByteForceDB 💾
+# ByteForceDB
 
-**My logic to creating this:** [How I Crafted](./How_I_Crafted.md)
+> **Read the Engineering Blog:** [How I Crafted ByteForceDB](./How_I_Crafted.md)
 
-**ByteForce** isn't just another database—it's a journey into the heart of how data engines actually work. I built this from scratch to peel back the layers of abstraction and demonstrate the core internals of an RDBMS: parsing, query planning, execution, indexing, and persistence.
+**ByteForce** is a lightweight, Relational Database Management System (RDBMS) built from scratch. It is designed to demonstrate the core internals of a database engine—parsing, query planning, execution, indexing, and persistence—without the complexity of a production-grade system like PostgreSQL.
 
-But I didn't stop at one implementation. I wanted to see how the *same* architectural logic plays out in two completely different programming paradigms.
-
----
-
-## 🧭 Where do you want to go?
-
-This project is a tale of two languages. Same logic, different worlds.
-
-### 🐍 The Python Edition
-**Check the Python Version here:** [➡️ Go to `python/`](./python/)
-
-> "I want to see the logic flowing clearly. I want rapid prototyping and clean, readable code."
-
-*   **Engine:** Pure Python with `Lark` parsing.
-*   **Vibe:** Dynamic, flexible, and concise.
-
-### ☕ The Java Edition
-**Check the Java Version here:** [➡️ Go to `java/`](./java/)
-
-> "I want to see strict engineering. I want compile-time safety, robust build tools, and high performance."
-
-*   **Engine:** Java 21 with `ANTLR4` and Maven.
-*   **Vibe:** Strict, robust, and engineered.
+This project offers a unique **comparative study** by implementing the *exact same architecture* in two different languages: **Python** (Dynamic, Interpreted) and **Java** (Static, Compiled).
 
 ---
 
-## 🏗️ The Shared DNA (Architecture)
+## Two Worlds, One Logic
 
-Despite their differences, both engines share the exact same heart. Whether it's Python dictionaries or Java Maps, the flow of data remains the classic database architecture:
+| Feature | Python Edition | Java Edition |
+| :--- | :--- | :--- |
+| **Location** | [**Browse Python Code**](./python/) | [**Browse Java Code**](./java/) |
+| **Philosophy** | Rapid prototyping, readability, and flexibility. | Strict type safety, performance, and robustness. |
+| **Parsing** | **Lark** (EBNF grammar). | **ANTLR4** (LL(*) parser generator). |
+| **Type System** | Dynamic (Duck typing). | Static (Strongly typed models & Records). |
+| **Execution** | Dictionary-based processing. | Strictly typed `ExecutionResult` and Maps. |
+| **Build Tool** | `pip` & `venv`. | **Maven** (Dependency & Lifecycle management). |
+| **Testing** | `pytest` (Concise assertions). | `JUnit 5` (Structured test lifecycle). |
+
+---
+
+## System Architecture
+
+Both implementations follow a classic, layered database architecture:
 
 ```mermaid
 graph TD
@@ -61,48 +53,126 @@ graph TD
 
 ---
 
-## 🧪 "But does it work?" (Testing & Quality)
+## Key Features (Both Editions)
 
-I believe a database is only as good as its tests. I didn't just write code; I tortured it to make sure it handles your data correctly.
-
-### 1. The Python Test Suite
-I used **`pytest`** to strictly verify the logic. It runs through everything—from simple inserts to complex, multi-table joins.
-
-![Python Tests](python/assets/test.png)
-*See that green? That's the sound of logic working.*
-
-### 2. The Java Build Lifecycle
-For Java, I used **Maven** and **JUnit 5**. We don't just run tests; we enforce a strict lifecycle. If the code isn't formatted correctly or if a single type doesn't match, the build fails before it even runs.
-
-![Java Build](java/src/assets/java-build.png)
-*The build process generating parser code and verifying type safety.*
-
-### 3. Code Quality (Linting)
-Sloppy code leads to sloppy databases.
-*   **Python**: Enforced by **Black**.
-*   **Java**: Enforced by **Google Java Format** (via Spotless).
-
-![Linting](python/assets/lint.png)
+*   **SQL Subset**: Supports standard `CREATE TABLE`, `INSERT`, `SELECT`, `UPDATE`, `DELETE`.
+*   **Joins**: Implements `INNER JOIN` logic to combine data across tables.
+*   **Indexing**: Hash-based indexing for O(1) retrieval of records by key.
+*   **Persistence**: Auto-saves data to disk (JSON/Pickle/Java Serialization) to persist state between runs.
+*   **REPL**: A robust command-line interface with history, auto-completion, and ASCII table formatting.
 
 ---
 
-## 🚀 Getting Started
+## Python Edition
 
-Ready to run it? I've made it effortless.
+*Best for understanding the logical flow and rapid experimentation.*
 
-### 🐍 Python Quick Start
-1.  Navigate to the `python/` folder.
-2.  **Windows**: Double-click `run.bat`. It handles the virtual environment (`venv`) setup automatically!
-3.  **Manual**: Run `python cli.py`.
+[**Explore the Python Project**](./python/)
 
-### ☕ Java Quick Start
-1.  Navigate to the `java/` folder.
-2.  **Windows**: Double-click `run.bat`. It compiles the ANTLR grammar, builds the JAR, and launches the shell.
-3.  **Manual**:
-    ```bash
-    mvn clean install
-    java -jar target/byteforce-db-1.0-SNAPSHOT-jar-with-dependencies.jar
-    ```
+### Prerequisites
+*   Python 3.9+
+
+### Quick Start
+```bash
+cd python
+./run.bat  # Windows (Auto-setup venv & run)
+# or
+python cli.py
+```
+
+### Visuals
+
+![Logic](python/assets/logic.png)
+*Figure 1: The logical architecture of the Python implementation.*
+
+![Tests](python/assets/test.png)
+*Figure 2: The Pytest suite verifying core features and edge cases.*
+
+![Lint](python/assets/lint.png)
+*Figure 3: Code quality enforcement using Black.*
+
+---
+
+## Java Edition
+
+*Best for seeing strict engineering practices, type safety, and build tooling.*
+
+[**Explore the Java Project**](./java/)
+
+### Prerequisites
+*   Java 21+
+*   Maven 3.6+
+
+### Quick Start
+```bash
+cd java
+./run.bat  # Windows (Auto-compile & run)
+# or
+mvn clean install
+java -jar target/byteforce-db-1.0-SNAPSHOT-jar-with-dependencies.jar
+```
+
+### Visuals
+
+![Run](java/src/assets/java-run.png)
+*Figure 4: The Java CLI running the interactive shell with JLine.*
+
+![Build](java/src/assets/java-build.png)
+*Figure 5: Maven build process compiling sources and generating the fat JAR.*
+
+![Tests](java/src/assets/java-tests.png)
+*Figure 6: JUnit 5 test suite execution ensuring system stability.*
+
+![Lint](java/src/assets/java-lint.png)
+*Figure 7: Spotless formatter ensuring Google Java Style compliance.*
+
+---
+
+## Usage Example (Works in Both!)
+
+Once the shell is running, you can execute standard SQL commands:
+
+```sql
+-- 1. Create a table
+CREATE TABLE users (id INTEGER PRIMARY KEY, name TEXT)
+
+-- 2. Insert data
+INSERT INTO users VALUES (1, 'Alice')
+INSERT INTO users VALUES (2, 'Bob')
+
+-- 3. Create a secondary index for speed
+CREATE INDEX idx_name ON users(name)
+
+-- 4. Query with filtering (Uses Index!)
+SELECT * FROM users WHERE name = 'Alice'
+
+-- 5. Update data
+UPDATE users SET name = 'Alicia' WHERE id = 1
+
+-- 6. Complex Join
+CREATE TABLE orders (oid INTEGER PRIMARY KEY, user_id INTEGER, amount FLOAT)
+INSERT INTO orders VALUES (100, 1, 50.5)
+SELECT name, amount FROM users JOIN orders ON id = user_id
+```
+
+---
+
+## Project Structure
+
+```text
+ByteForceDB/
+├── python/                 # Python Implementation
+│   ├── cli.py              # Entry point
+│   ├── core/               # Engine logic
+│   └── tests/              # Pytest suite
+│
+├── java/                   # Java Implementation
+│   ├── src/main/antlr4/    # SQL Grammar (Sql.g4)
+│   ├── src/main/java/      # Core Engine & CLI
+│   └── src/test/java/      # JUnit tests
+│
+└── How_I_Crafted.md        # Detailed engineering blog/logic
+```
 
 ---
 *Created by Newton Maina*
