@@ -2,7 +2,9 @@
 
 **My logic to creating this:** [How I Crafted](../How_I_Crafted.md)
 
-This is the **strict, statically-typed port** of the ByteForce RDBMS. While the Python version focuses on logical clarity, this Java implementation focuses on **engineering rigor, type safety, and build tooling**.
+Welcome to the **Java Edition** of ByteForce. While the Python version focuses on being dynamic and readable, this implementation is all about **strict engineering rigor**. I built this port to demonstrate how type safety, compilation, and robust tooling can catch errors *before* the code even runs.
+
+If you want to see how a database engine handles strict schemas and structured execution plans, you are in the right place.
 
 ---
 
@@ -63,11 +65,9 @@ graph TD
 *   **Maven**: 3.6+
 
 ### Option A: Automated Setup (Windows) ⚡
-Simply run the provided batch scripts to build and launch without manual Maven commands.
+I've included batch scripts to make your life easier. Just click and go!
 
 *   **Run**: Double-click `run.bat` (Compiles and starts the interactive CLI).
-    ![Run Script](src/assets/java-run.png)
-
 *   **Test**: Double-click `test.bat` (Runs the JUnit test suite).
 
 ### Option B: Manual Workflow 🛠️
@@ -77,7 +77,6 @@ This step generates the ANTLR sources, compiles the code, and packages the JAR.
 ```bash
 mvn clean install
 ```
-![Build Process](src/assets/java-build.png)
 
 #### 2. Run the Database
 Launch the interactive shell using the shaded JAR (Fat JAR):
@@ -94,7 +93,7 @@ ByteForce CLI supports special commands for managing the database environment:
 
 -   `.tables`: List all tables.
 -   `.schema <table>`: Show the structure of a table (columns, types, constraints).
--   `.seed <table> <count>`: Automatically insert `<count>` random rows for performance testing.
+-   `.seed <table> <num>`: Automatically insert `<count>` random rows for performance testing.
 -   `.export <table> <f>`: Export a table's data to a CSV file.
 -   `.help`: Show available commands.
 -   `.exit`: Quit the application.
@@ -133,21 +132,25 @@ SELECT name, amount FROM users JOIN orders ON id = user_id
 We enforce code style (Google Java Format) automatically using the Spotless/FMT plugin.
 ```bash
 mvn com.spotify.fmt:fmt-maven-plugin:format
-# or simply
-lint.bat
 ```
-![Linting Output](src/assets/java-lint.png)
 
 ### Running Tests
 We use **JUnit 5** for unit testing core database features.
 ```bash
 mvn test
-# or simply
-test.bat
 ```
-![Test Output](src/assets/java-tests.png)
 
 ---
+
+## 🆚 Comparison: Java vs. Python Implementation
+
+| Feature | Java Edition | Python Edition |
+| :--- | :--- | :--- |
+| **Parsing** | **ANTLR4** (Generated code, strict grammar) | **Lark** (Dynamic EBNF parsing) |
+| **Typing** | **Static** (Compile-time checks) | **Dynamic** (Runtime duck typing) |
+| **Data Models** | Classes (`Table`, `Column`, `DataType` Enum) | Dictionaries & Dataclasses |
+| **Safety** | High (Compiler catches type errors) | Moderate (Relies on extensive testing) |
+| **Boilerplate** | High (Getters/Setters, Visitors, Factories) | Low (Concise logic) |
 
 ## 📂 Project Structure
 
