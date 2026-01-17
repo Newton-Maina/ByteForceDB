@@ -1,24 +1,38 @@
-# ByteForce RDBMS
+# ByteForceDB 💾
 
 **My logic to creating this:** [How I Crafted](./How_I_Crafted.md)
 
-![Architecture Diagram](assets/logic.png)
+**ByteForce** is a lightweight, Relational Database Management System (RDBMS) built from scratch. It is designed to demonstrate the core internals of a database engine—parsing, query planning, execution, indexing, and persistence—without the complexity of a production-grade system like PostgreSQL.
 
-**ByteForce** is a lightweight, pure-Python Relational Database Management System (RDBMS) designed for rapid prototyping. It provides a functional SQL engine that supports parsing, execution planning, indexing, and persistent storage, making it an excellent tool for understanding how databases work under the hood.
+This project offers a unique **comparative study** by implementing the *exact same architecture* in two different languages: **Python** (Dynamic, Interpreted) and **Java** (Static, Compiled).
 
-## System Architecture
+---
 
-The system follows a classic layered database architecture, separating concerns between parsing, execution, and storage.
+## 🌍 Two Worlds, One Logic
 
+| Feature | [🐍 Python Edition](./python/) | [☕ Java Edition](./java/) |
+| :--- | :--- | :--- |
+| **Philosophy** | Rapid prototyping, readability, and flexibility. | Strict type safety, performance, and robustness. |
+| **Parsing** | **Lark** (EBNF grammar). | **ANTLR4** (LL(*) parser generator). |
+| **Type System** | Dynamic (Duck typing). | Static (Strongly typed models & Records). |
+| **Execution** | Dictionary-based processing. | Strictly typed `ExecutionResult` and Maps. |
+| **Build Tool** | `pip` & `venv`. | **Maven** (Dependency & Lifecycle management). |
+| **Testing** | `pytest` (Concise assertions). | `JUnit 5` (Structured test lifecycle). |
+
+---
+
+## 🏗️ System Architecture
+
+Both implementations follow a classic, layered database architecture:
 
 ```mermaid
 graph TD
-    User([User]) -->|SQL Command| REPL[CLI / REPL]
+    User([User]) -->|SQL Command| REPL[Interactive CLI]
     REPL -->|Submit| Facade[ByteForceDB Facade]
     
     subgraph Core Engine
         Facade -->|1. Parse SQL| Parser[SQL Parser]
-        Parser -->|2. AST| Facade
+        Parser -->|2. AST / Plan| Facade
         Facade -->|3. Execute Plan| Executor[Execution Engine]
         
         Executor -->|Filter/Join| Optimizer[Query Optimizer]
@@ -33,104 +47,83 @@ graph TD
         Storage -.->|Manage| Index
     end
     
-    Storage -->|Serialize with Pickle| Disk[("File System /data")]
+    Storage -->|Serialize to Disk| Disk[("File System")]
 ```
 
-## Features
+---
 
--   **SQL Interface**: Support for standard DDL and DML operations (`CREATE`, `INSERT`, `SELECT`, `UPDATE`, `DELETE`).
--   **Intelligent Parsing**: robust SQL parsing using the **Lark** parsing library.
--   **Performance**:
-    -   **Hash Indexing**: O(1) lookups for equality searches.
-    -   **Query Optimization**: Automatically utilizes indices for `WHERE` clauses.
--   **Relational Algebra**: Supports `INNER JOIN` operations to combine data across tables.
--   **Security**: Supports **Parameterized Queries** (`?` placeholders) to prevent SQL Injection attacks ....hehe.
--   **Data Integrity**: Enforces `PRIMARY KEY`, `UNIQUE`, and `NOT NULL` constraints.
--   **Persistence**: Automatic serialization to disk, ensuring data survives restarts.
--   **Rich REPL**: A beautiful, interactive command-line interface with syntax highlighting, history, and formatted table output.
+## 🚀 Key Features (Both Editions)
 
-## Prerequisites
+*   **SQL Subset**: Supports standard `CREATE TABLE`, `INSERT`, `SELECT`, `UPDATE`, `DELETE`.
+*   **Joins**: Implements `INNER JOIN` logic to combine data across tables.
+*   **Indexing**: Hash-based indexing for O(1) retrieval of records by key.
+*   **Persistence**: Auto-saves data to disk (JSON/Pickle/Java Serialization) to persist state between runs.
+*   **REPL**: A robust command-line interface with history, auto-completion, and ASCII table formatting.
 
--   **Operating System**: Windows (Batch scripts provided), Linux, or macOS.
--   **Python**: Version **3.9** or higher.
+---
 
-## Quick Start (Automatic Setup)
+## 🐍 Python Edition
 
-ByteForce comes with automated scripts to set up your environment instantly.
+*Best for understanding the logical flow and rapid experimentation.*
 
-### 1. Run the Database
-Simply double-click **`run.bat`** (or run it from cmd/powershell).
+### Prerequisites
+*   Python 3.9+
 
-*What this does:*
-1.  Checks if a Python virtual environment (`venv`) exists.
-2.  If not, it creates one and installs all dependencies from `requirements.txt`.
-3.  Launches the ByteForce CLI.
-
-### Meta Commands
--   `.tables`: List all tables.
--   `.schema <table>`: Show the structure of a table (columns, types, constraints).
--   `.seed <table> <count>`: Automatically insert `<count>` random rows for performance testing.
--   `.export <table> <file.csv>`: Export a table's data to a CSV file.
--   `.help`: Show available commands.
--   `.exit`: Quit the application.
-
-## Development Workflow
-
-### Code Quality
-This project enforces **PEP 8** standards using the `Black` formatter. To ensure code quality, run:
+### Quick Start
 ```bash
-lint.bat
+cd python
+./run.bat  # Windows (Auto-setup venv & run)
+# or
+python cli.py
 ```
 
-![Linting Output](assets/lint.png)
+### Visuals
+**Logic & Architecture**
+![Logic](python/assets/logic.png)
 
-### Running Tests
-Double-click `test.bat` (Windows) or execute:
+**Testing Suite (`pytest`)**
+![Tests](python/assets/test.png)
+
+**Linting (`black`)**
+![Lint](python/assets/lint.png)
+
+---
+
+## ☕ Java Edition
+
+*Best for seeing strict engineering practices, type safety, and build tooling.*
+
+### Prerequisites
+*   Java 21+
+*   Maven 3.6+
+
+### Quick Start
 ```bash
-# Set PYTHONPATH to current directory
-export PYTHONPATH=.  # Linux/Mac
-set PYTHONPATH=.     # Windows CMD
-
-pytest tests/
+cd java
+./run.bat  # Windows (Auto-compile & run)
+# or
+mvn clean install
+java -jar target/byteforce-db-1.0-SNAPSHOT-jar-with-dependencies.jar
 ```
 
-![Test Suite Output](assets/test.png)
-## Manual Installation
+### Visuals
+**Running the CLI**
+![Run](java/src/assets/java-run.png)
 
-If you are on a non-Windows system or prefer manual control:
+**Build Process**
+![Build](java/src/assets/java-build.png)
 
-1.  **Clone the repository**:
-    ```bash
-    git clone https://github.com/Newton-Maina/ByteForceDB.git
-    cd ByteForceDB
-    ```
+**Testing Suite (`JUnit 5`)**
+![Tests](java/src/assets/java-tests.png)
 
-2.  **Create and Activate Virtual Environment**:
-    ```bash
-    # Linux/Mac
-    python3 -m venv venv
-    source venv/bin/activate
-    or
-    source ./venv/bin/activate
+**Linting (`Spotify FMT`)**
+![Lint](java/src/assets/java-lint.png)
 
-    # Windows
-    python -m venv venv
-    .\venv\Scripts\activate
-    ```
+---
 
-3.  **Install Dependencies**:
-    ```bash
-    pip install -r requirements.txt
-    ```
+## 💡 Usage Example (Works in Both!)
 
-4.  **Run**:
-    ```bash
-    # Set python path to current directory
-    export PYTHONPATH=.
-    python cli.py
-    ```
-
-## Usage Example
+Once the shell is running, you can execute standard SQL commands:
 
 ```sql
 -- 1. Create a table
@@ -155,12 +148,24 @@ INSERT INTO orders VALUES (100, 1, 50.5)
 SELECT name, amount FROM users JOIN orders ON id = user_id
 ```
 
-## Project Structure
+---
 
--   `core/`: Contains the database engine logic.
-    -   `parser.py`: SQL grammar and AST generation.
-    -   `executor.py`: Execution logic (Select, Insert, Update, etc.).
-    -   `storage.py`: Persistence layer.
-    -   `models.py`: Data structures (Table, Column, Index).
--   `cli.py`: The entry point for the interactive REPL.
--   `tests/`: Unit tests ensuring system stability.
+## 📂 Project Structure
+
+```text
+ByteForceDB/
+├── python/                 # Python Implementation
+│   ├── cli.py              # Entry point
+│   ├── core/               # Engine logic
+│   └── tests/              # Pytest suite
+│
+├── java/                   # Java Implementation
+│   ├── src/main/antlr4/    # SQL Grammar (Sql.g4)
+│   ├── src/main/java/      # Core Engine & CLI
+│   └── src/test/java/      # JUnit tests
+│
+└── How_I_Crafted.md        # Detailed engineering blog/logic
+```
+
+---
+*Created by Newton Maina*
