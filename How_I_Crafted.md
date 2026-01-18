@@ -26,8 +26,8 @@ I followed a Test-Driven Development (TDD) cycle to ensure stability at every la
 
 2.  **Phase 2: The Grammar (Parsing)**
     *   *Challenge*: Parsing SQL is hard. Regex isn't enough.
+    *   *The "CNAME" Incident*: I hit a roadblock where the parser kept throwing "Lexer Errors" whenever I tried to select a column. It turned out my grammar couldn't tell the difference between a general string and a column name like `user_id`. It was treating everything as text. I had to specifically introduce a token called `CNAME` (Common Name) into the grammar rules. This tweak finally allowed the engine to distinguish between *data* ('John Doe') and *structure* (table columns), stabilizing the parser.
     *   *Solution*: I implemented a grammar using **Lark**. It allowed me to define rules like `select_stmt` and `where_clause` cleanly.
-    *   *Refinement*: I initially struggled with parsing strings vs. identifiers but refined the grammar to handle `CNAME` (identifiers) and `STRING` (literals) correctly.
 
 3.  **Phase 3: Relational Logic (JOINs)**
     *   *Goal*: Connect two tables.
@@ -72,3 +72,9 @@ After building the Python prototype, I decided to challenge myself by porting th
 *   **Strict Typing**: While Python's `Dict[str, Any]` offered flexibility, Java required a rigid `Map<String, Object>` structure with explicit type casting. This caught several potential bugs at compile time that Python would only catch at runtime.
 *   **ANTLR4 vs Lark**: Moving from Lark to ANTLR4 required defining a formal grammar file (`.g4`). This was more verbose but resulted in a much more robust and standard parser.
 *   **Maven**: Setting up the build pipeline with Maven allowed for easy dependency management and the creation of a standalone "Fat JAR" for the CLI.
+
+## 8. The Web Interface (Flask vs. Django)
+To showcase the database in a real-world scenario, I built a Task Manager application on top of it. When choosing the web framework, I deliberately picked **Flask** over Django.
+
+*   **Why Flask?**: Django is excellent, but it comes with *everything* included—most notably, its own powerful ORM (Object-Relational Mapper). Using Django would have felt like cheating; I didn't want its ORM hiding the work my database engine was doing.
+*   **The "Micro" Advantage**: Flask is a micro-framework. It gave me a blank canvas to wire up my `ByteForceDB` manually. I could write raw SQL queries in my Python routes (`db.execute("SELECT * ...")`) and pass the results directly to the Jinja2 templates. It was lightweight, fast to craft, and kept the focus strictly on *my* database logic, not the framework's magic.

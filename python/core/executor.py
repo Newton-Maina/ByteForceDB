@@ -129,7 +129,7 @@ class ExecutionEngine:
 
         # Join Execution
         if join:
-            # ... (join logic remains same)
+            join_type = join.get("type", "inner")
             join_table_name = join["join_table"]
             join_table = self.storage.get_table(join_table_name)
             if not join_table:
@@ -138,10 +138,19 @@ class ExecutionEngine:
             condition = join["condition"]
             joined_results = []
             for left_row in results:
+                match_found = False
                 for right_row in join_table.rows:
                     if self._evaluate_join_condition(left_row, right_row, condition):
                         merged = {**left_row, **right_row}
                         joined_results.append(merged)
+                        match_found = True
+                
+                if join_type == "left" and not match_found:
+                    # Fill right table columns with None
+                    null_right = {col: None for col in join_table.columns.keys()}
+                    merged = {**left_row, **null_right}
+                    joined_results.append(merged)
+
             results = joined_results
 
         # Filter

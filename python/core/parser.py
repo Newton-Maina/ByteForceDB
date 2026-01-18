@@ -39,7 +39,9 @@ sql_grammar = r"""
     # --- DQL: Data Query Language ---
     select_stmt: "SELECT" (ASTERISK | column_list) "FROM" CNAME [join_clause] [where_clause] [limit_clause]
     limit_clause: "LIMIT" INT
-    join_clause: "JOIN" CNAME "ON" condition
+    join_clause: [join_type] "JOIN" CNAME "ON" condition
+    join_type: "LEFT" -> left_join
+             | "INNER" -> inner_join
     column_list: "(" CNAME ("," CNAME)* ")" -> col_list_paren
                | CNAME ("," CNAME)*        -> col_list_plain
     ASTERISK: "*"
@@ -216,7 +218,15 @@ class SQLTransformer(Transformer):
         return {"limit": int(items[0])}
 
     def join_clause(self, items):
-        return {"join_table": str(items[0]), "condition": items[1]}
+        if len(items) == 3:
+            return {"type": items[0], "join_table": str(items[1]), "condition": items[2]}
+        return {"type": "inner", "join_table": str(items[0]), "condition": items[1]}
+
+    def left_join(self, _):
+        return "left"
+
+    def inner_join(self, _):
+        return "inner"
 
     def ASTERISK(self, _):
         return "*"

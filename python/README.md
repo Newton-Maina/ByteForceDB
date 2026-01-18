@@ -62,25 +62,60 @@ graph TD
 
 ---
 
-## Quick Start (Automatic Setup)
+## Quick Start (Two Modes)
 
-ByteForce comes with automated scripts to set up your environment instantly.
+ByteForceDB now features both a classic Command-Line Interface (CLI) and a modern Web-based Demo.
 
-### 1. Run the Database
-Simply double-click **`run.bat`** (or run it from cmd/powershell).
+### 1. Interactive CLI (SQL Shell)
+Run the classic REPL to execute raw SQL commands.
+Double-click **`run.bat`** (or `python cli.py`).
 
-*What this does:*
-1.  Checks if a Python virtual environment (`venv`) exists.
-2.  If not, it creates one and installs all dependencies from `requirements.txt`.
-3.  Launches the ByteForce CLI.
+### 2. Web Interface (Task Manager Demo)
+Launch a full-stack Task Manager application built on ByteForceDB.
+Double-click **`web.bat`** (or `python webapp.py`).
 
-### Meta Commands
--   `.tables`: List all tables.
--   `.schema <table>`: Show the structure of a table (columns, types, constraints).
--   `.seed <table> <count>`: Automatically insert `<count>` random rows for performance testing.
--   `.export <table> <f>`: Export a table's data to a CSV file.
--   `.help`: Show available commands.
--   `.exit`: Quit the application.
+*   **Features**:
+    *   **Active Tasks**: View and manage to-do items.
+    *   **Drafts**: Save tasks without publishing them immediately.
+    *   **Trash**: Soft-delete items with restore capability.
+    *   **Subtasks**: Nested task support demonstrating `LEFT JOIN`.
+
+#### Web Screenshots
+
+![Main Page](assets/web-main-page.png)
+*Figure 4: The active task list showing hierarchical data (Tasks & Subtasks).*
+
+![Drafts View](assets/web-drafts.png)
+*Figure 5: The Drafts view for work-in-progress items.*
+
+![Trash View](assets/web-trash.png)
+*Figure 6: The Trash can for recovering deleted items.*
+
+---
+
+## Embedded API Usage
+
+You can use ByteForceDB directly in your Python applications as an embedded database (similar to SQLite).
+
+```python
+from core.database import ByteForceDB
+
+# 1. Initialize
+db = ByteForceDB(data_dir="data")
+
+# 2. Execute DDL
+db.execute("CREATE TABLE sensors (id INTEGER PRIMARY KEY, value FLOAT)")
+
+# 3. Insert Data (with parameterized safety)
+db.execute("INSERT INTO sensors VALUES (?, ?)", [1, 23.5])
+db.execute("INSERT INTO sensors VALUES (?, ?)", [2, 45.1])
+
+# 4. Query Data
+results = db.execute("SELECT * FROM sensors WHERE value > 20")
+# Returns: [{'id': 1, 'value': 23.5}, {'id': 2, 'value': 45.1}]
+
+print(results)
+```
 
 ---
 

@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ByteForce Task Master</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body { background-color: #f0f2f5; font-family: 'Inter', sans-serif; }
+        .main-container { max-width: 800px; margin: 40px auto; }
+        .app-header { background: linear-gradient(135deg, #0d6efd, #0dcaf0); color: white; border-radius: 15px 15px 0 0; padding: 30px; }
+        .nav-tabs .nav-link { color: #495057; border: none; font-weight: 500; }
+        .nav-tabs .nav-link.active { color: #0d6efd; border-bottom: 3px solid #0d6efd; background: none; }
+        .task-card { transition: transform 0.2s, box-shadow 0.2s; border: none; border-left: 4px solid #0d6efd; margin-bottom: 15px; }
+        .task-card:hover { transform: translateY(-2px); box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
+        .task-card.completed { border-left-color: #198754; opacity: 0.9; }
+        .task-card.draft { border-left-color: #ffc107; border-style: dashed; }
+        .task-card.trash { border-left-color: #dc3545; }
+        .strikethrough { text-decoration: line-through; color: #adb5bd; }
+        .meta-text { font-size: 0.8rem; color: #999; }
+        .subtasks-area { border-top: 1px solid #eee; margin-top: 10px; padding-top: 10px; padding-left: 2.5rem; }
+        .subtask-item { font-size: 0.9rem; color: #555; }
+    </style>
+</head>
+<body>
+
+<div class="main-container shadow bg-white rounded-4">
+    
+    <!-- Header -->
+    <div class="app-header text-center">
+        <h1><i class="fa-solid fa-database"></i> ByteForce Tasks</h1>
+    </div>
+
+    <!-- Navigation -->
+    <div class="px-4 pt-4">
+        <ul class="nav nav-tabs">
+            <li class="nav-item">
+                <a class="nav-link {% if view == 'active' %}active{% endif %}" href="/tasks/active">
+                    <i class="fa-solid fa-list-check"></i> My Day
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link {% if view == 'drafts' %}active{% endif %}" href="/tasks/drafts">
+                    <i class="fa-solid fa-pencil"></i> Drafts
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link {% if view == 'trash' %}active{% endif %}" href="/tasks/trash">
+                    <i class="fa-solid fa-trash"></i> Trash
+                </a>
+            </li>
+        </ul>
+    </div>
+
+    <!-- Content Area -->
+    <div class="p-4 bg-light">
+        
+        <!-- Alerts -->
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
+                    {{ message }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                </div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+
+        <!-- Input Form (Only for Active/Drafts) -->
+        {% if view != 'trash' %}
+        <div class="card border-0 shadow-sm mb-4">
+            <div class="card-body">
+                <form action="/add" method="POST" class="d-flex gap-2">
+                    <input type="text" name="title" class="form-control form-control-lg" placeholder="Add a new task..." required autocomplete="off">
+                    <div class="form-check form-switch d-flex align-items-center" title="Save as Draft">
+                        <input class="form-check-input" type="checkbox" name="is_draft" id="draftCheck">
+                        <label class="form-check-label ms-1 small text-muted" for="draftCheck">Draft</label>
+                    </div>
+                    <button type="submit" class="btn btn-primary btn-lg"><i class="fa-solid fa-plus"></i></button>
+                </form>
+            </div>
+        </div>
+        {% endif %}
+
+        <!-- Task List -->
+        <div class="task-list">
+            {% for task in tasks %}
+            <div class="card task-card p-3 {% if task.status == 'completed' %}completed{% endif %} {% if task.is_draft %}draft{% endif %} {% if task.is_deleted %}trash{% endif %}">
+                <div class="d-flex justify-content-between align-items-center">
+                    
+                    <!-- Task Content -->
+                    <div class="d-flex align-items-center gap-3">
+                        {% if view == 'active' %}
+                        <a href="/action/toggle/{{ task.id }}" class="text-decoration-none">
+                            <i class="fa-regular {% if task.status == 'completed' %}fa-circle-check text-success{% else %}fa-circle text-muted{% endif %} fa-xl"></i>
+                        </a>
+                        {% endif %}
+                        
+                        <div>
+                            <h5 class="mb-0 {% if task.status == 'completed' %}strikethrough{% endif %}">
+                                {{ task.title }}
+                            </h5>
+                            <span class="meta-text">
+                                <i class="fa-regular fa-clock"></i> {{ task.created_at }}
+                                {% if task.is_draft %}<span class="badge bg-warning text-dark ms-1">Draft</span>{% endif %}
+                                {% if task.subtasks %}
+                                    &bull; {{ task.subtasks|length }} subtasks
+                                {% endif %}
+                            </span>
+                        </div>
+                    </div>
+
+                    <!-- Actions -->
+                    <div class="btn-group">
+                        {% if view == 'trash' %}
+                            <a href="/action/restore/{{ task.id }}" class="btn btn-sm btn-outline-success" title="Restore"><i class="fa-solid fa-rotate-left"></i> Restore</a>
+                            <a href="/action/destroy/{{ task.id }}" class="btn btn-sm btn-outline-danger" onclick="return confirm('Delete permanently?')" title="Delete Forever"><i class="fa-solid fa-fire"></i></a>
+                        {% elif view == 'drafts' %}
+                            <a href="/action/publish/{{ task.id }}" class="btn btn-sm btn-success" title="Publish"><i class="fa-solid fa-upload"></i> Publish</a>
+                            <a href="/action/delete/{{ task.id }}" class="btn btn-sm btn-outline-secondary" title="Trash"><i class="fa-solid fa-trash"></i></a>
+                        {% else %}
+                            <a href="/action/delete/{{ task.id }}" class="btn btn-sm btn-outline-secondary border-0" title="Move to Trash"><i class="fa-solid fa-trash"></i></a>
+                        {% endif %}
+                    </div>
+                </div>
+
+                <!-- Subtasks Section -->
+                {% if view == 'active' and not task.is_deleted %}
+                <div class="subtasks-area">
+                    <!-- Progress Bar (if subtasks exist) -->
+                    {% if task.subtasks %}
+                        {% set completed = task.subtasks|selectattr("substatus", "equalto", "completed")|list|length %}
+                        {% set total = task.subtasks|length %}
+                        {% set pct = (completed / total * 100)|round|int %}
+                        <div class="progress mb-2" style="height: 5px; width: 200px;">
+                            <div class="progress-bar bg-info" role="progressbar" style="width: {{ pct }}%"></div>
+                        </div>
+                    {% endif %}
+
+                    <!-- List Subtasks -->
+                    {% for sub in task.subtasks %}
+                    <div class="d-flex align-items-center mb-1 subtask-item">
+                        <a href="/subtask/toggle/{{ sub.sid }}" class="text-decoration-none me-2">
+                            <i class="fa-regular {% if sub.substatus == 'completed' %}fa-square-check text-primary{% else %}fa-square text-muted{% endif %}"></i>
+                        </a>
+                        <span class="{% if sub.substatus == 'completed' %}strikethrough{% endif %}">{{ sub.subtitle }}</span>
+                    </div>
+                    {% endfor %}
+
+                    <!-- Add Subtask Form -->
+                    <form action="/subtask/add" method="POST" class="mt-2 d-flex align-items-center">
+                        <input type="hidden" name="parent_id" value="{{ task.id }}">
+                        <i class="fa-solid fa-turn-up fa-rotate-90 text-muted me-2 small"></i>
+                        <input type="text" name="subtitle" class="form-control form-control-sm border-0 bg-transparent" placeholder="Add a step..." style="max-width: 200px;">
+                        <button type="submit" class="btn btn-sm btn-link text-decoration-none p-0 ms-1"><i class="fa-solid fa-plus"></i></button>
+                    </form>
+                </div>
+                {% endif %}
+
+            </div>
+            {% else %}
+            <div class="text-center py-5 text-muted">
+                <i class="fa-solid fa-clipboard-check fa-3x mb-3 opacity-25"></i>
+                <p>No tasks found in {{ view }}.</p>
+            </div>
+            {% endfor %}
+        </div>
+
+    </div>
+    <footer class="text-center mt-4 pb-4 text-muted small">
+        <p>&copy; 2026 ByteForceDB Technical Assessment by <strong>Newton Maina</strong>. Built with Python & Flask.</p>
+    </footer>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

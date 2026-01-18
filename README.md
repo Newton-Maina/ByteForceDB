@@ -75,21 +75,24 @@ graph TD
 ### Quick Start
 ```bash
 cd python
-./run.bat  # Windows (Auto-setup venv & run)
+./run.bat  # Launch Interactive SQL Shell
 # or
-python cli.py
+./web.bat  # Launch Web Task Manager Demo
 ```
 
 ### Visuals
 
+![Web Demo](python/assets/web-main-page.png)
+*Figure 1: The new Web Interface demonstrating complex JOINs and application logic.*
+
 ![Logic](python/assets/logic.png)
-*Figure 1: The logical architecture of the Python implementation.*
+*Figure 2: The logical architecture of the Python implementation.*
 
 ![Tests](python/assets/test.png)
-*Figure 2: The Pytest suite verifying core features and edge cases.*
+*Figure 3: The Pytest suite verifying core features and edge cases.*
 
 ![Lint](python/assets/lint.png)
-*Figure 3: Code quality enforcement using Black.*
+*Figure 4: Code quality enforcement using Black.*
 
 ---
 
