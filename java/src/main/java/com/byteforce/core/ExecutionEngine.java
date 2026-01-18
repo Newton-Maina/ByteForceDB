@@ -163,6 +163,7 @@ public class ExecutionEngine {
     // JOIN
     if (join != null) {
       String joinTableName = (String) join.get("join_table");
+      boolean isLeft = (Boolean) join.getOrDefault("is_left", false);
       Table joinTable = storage.getTable(joinTableName);
       if (joinTable == null)
         throw new IllegalArgumentException("Join table '" + joinTableName + "' not found");
@@ -171,12 +172,24 @@ public class ExecutionEngine {
       List<Map<String, Object>> joinedResults = new ArrayList<>();
 
       for (Map<String, Object> leftRow : results) {
+        boolean matched = false;
         for (Map<String, Object> rightRow : joinTable.getRows()) {
           if (evaluateJoinCondition(leftRow, rightRow, condition)) {
             Map<String, Object> merged = new HashMap<>(leftRow);
             merged.putAll(rightRow);
             joinedResults.add(merged);
+            matched = true;
           }
+        }
+        if (!matched && isLeft) {
+          Map<String, Object> merged = new HashMap<>(leftRow);
+          // Fill right table columns with null
+          for (String rightCol : joinTable.getColumns().keySet()) {
+            if (!merged.containsKey(rightCol)) {
+              merged.put(rightCol, null);
+            }
+          }
+          joinedResults.add(merged);
         }
       }
       results = joinedResults;

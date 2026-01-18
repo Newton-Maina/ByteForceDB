@@ -202,6 +202,7 @@ public class SQLParser {
       Map<String, Object> join = new HashMap<>();
       join.put("join_table", ctx.join_table.getText());
       join.put("condition", asMap(visit(ctx.condition())));
+      join.put("is_left", ctx.K_LEFT() != null);
       return join;
     }
 

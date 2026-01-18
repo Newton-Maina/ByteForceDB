@@ -73,7 +73,7 @@ columnList
     ;
 
 joinClause
-    : K_JOIN join_table=identifier K_ON condition
+    : K_LEFT? K_JOIN join_table=identifier K_ON condition
     ;
 
 whereClause
@@ -134,6 +134,7 @@ K_SET:      'SET';
 K_DELETE:   'DELETE';
 K_FROM:     'FROM';
 K_SELECT:   'SELECT';
+K_LEFT:     'LEFT';
 K_JOIN:     'JOIN';
 K_WHERE:    'WHERE';
 K_LIMIT:    'LIMIT';

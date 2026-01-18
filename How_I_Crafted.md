@@ -73,8 +73,8 @@ After building the Python prototype, I decided to challenge myself by porting th
 *   **ANTLR4 vs Lark**: Moving from Lark to ANTLR4 required defining a formal grammar file (`.g4`). This was more verbose but resulted in a much more robust and standard parser.
 *   **Maven**: Setting up the build pipeline with Maven allowed for easy dependency management and the creation of a standalone "Fat JAR" for the CLI.
 
-## 8. The Web Interface (Flask vs. Django)
-To showcase the database in a real-world scenario, I built a Task Manager application on top of it. When choosing the web framework, I deliberately picked **Flask** over Django.
+## 8. The Web Interface (Flask & Spark Java)
+To showcase the database in a real-world scenario, I built a Task Manager application on top of it. When choosing the web framework, I deliberately picked lightweight "micro-frameworks" for both editions: **Flask** for Python and **Spark Java** for the Java port.
 
-*   **Why Flask?**: Django is excellent, but it comes with *everything* included—most notably, its own powerful ORM (Object-Relational Mapper). Using Django would have felt like cheating; I didn't want its ORM hiding the work my database engine was doing.
-*   **The "Micro" Advantage**: Flask is a micro-framework. It gave me a blank canvas to wire up my `ByteForceDB` manually. I could write raw SQL queries in my Python routes (`db.execute("SELECT * ...")`) and pass the results directly to the Jinja2 templates. It was lightweight, fast to craft, and kept the focus strictly on *my* database logic, not the framework's magic.
+*   **The "Micro" Advantage**: Django (Python) or Spring Boot (Java) are excellent, but they come with *everything* included—most notably, their own powerful ORMs. Using them would have felt like cheating; I didn't want a third-party ORM hiding the work my database engine was doing.
+*   **Why Flask & Spark Java?**: They are counterparts. Both gave me a blank canvas to wire up my `ByteForceDB` manually. I could write raw SQL queries in my routes and pass the results directly to the templates (Jinja2 for Python, Handlebars for Java). This approach kept the focus strictly on *my* database logic, ensuring that the web app is a true demonstration of the underlying engine's capabilities.

@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ByteForce Task Master (Java)</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body { background-color: #f0f2f5; font-family: 'Inter', sans-serif; }
+        .main-container { max-width: 800px; margin: 40px auto; }
+        .app-header { background: linear-gradient(135deg, #d63384, #fd7e14); color: white; border-radius: 15px 15px 0 0; padding: 30px; }
+        .nav-tabs .nav-link { color: #495057; border: none; font-weight: 500; }
+        .nav-tabs .nav-link.active { color: #d63384; border-bottom: 3px solid #d63384; background: none; }
+        .task-card { transition: transform 0.2s, box-shadow 0.2s; border: none; border-left: 4px solid #d63384; margin-bottom: 15px; }
+        .task-card:hover { transform: translateY(-2px); box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
+        .task-card.completed { border-left-color: #198754; opacity: 0.9; }
+        .task-card.draft { border-left-color: #ffc107; border-style: dashed; }
+        .task-card.trash { border-left-color: #dc3545; }
+        .strikethrough { text-decoration: line-through; color: #adb5bd; }
+        .meta-text { font-size: 0.8rem; color: #999; }
+        .subtasks-area { border-top: 1px solid #eee; margin-top: 10px; padding-top: 10px; padding-left: 2.5rem; }
+        .subtask-item { font-size: 0.9rem; color: #555; }
+    </style>
+</head>
+<body>
+
+<div class="main-container shadow bg-white rounded-4">
+    
+    <!-- Header -->
+    <div class="app-header text-center">
+        <h1><i class="fa-brands fa-java"></i> ByteForce Tasks</h1>
+    </div>
+
+    <!-- Navigation -->
+    <div class="px-4 pt-4">
+        <ul class="nav nav-tabs">
+            <li class="nav-item">
+                <a class="nav-link {{#if isActive}}active{{/if}}" href="/tasks/active">
+                    <i class="fa-solid fa-list-check"></i> My Day
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link {{#if isDrafts}}active{{/if}}" href="/tasks/drafts">
+                    <i class="fa-solid fa-pencil"></i> Drafts
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link {{#if isTrash}}active{{/if}}" href="/tasks/trash">
+                    <i class="fa-solid fa-trash"></i> Trash
+                </a>
+            </li>
+        </ul>
+    </div>
+
+    <!-- Content Area -->
+    <div class="p-4 bg-light">
+
+        <!-- Input Form (Only for Active/Drafts) -->
+        {{#unless isTrash}}
+        <div class="card border-0 shadow-sm mb-4">
+            <div class="card-body">
+                <form action="/add" method="POST" class="d-flex gap-2">
+                    <input type="text" name="title" class="form-control form-control-lg" placeholder="Add a new task..." required autocomplete="off">
+                    <div class="form-check form-switch d-flex align-items-center" title="Save as Draft">
+                        <input class="form-check-input" type="checkbox" name="is_draft" id="draftCheck">
+                        <label class="form-check-label ms-1 small text-muted" for="draftCheck">Draft</label>
+                    </div>
+                    <button type="submit" class="btn btn-primary btn-lg" style="background-color: #d63384; border-color: #d63384;"><i class="fa-solid fa-plus"></i></button>
+                </form>
+            </div>
+        </div>
+        {{/unless}}
+
+        <!-- Task List -->
+        <div class="task-list">
+            {{#each tasks}}
+            <div class="card task-card p-3 {{status}} {{#if is_draft}}draft{{/if}} {{#if is_deleted}}trash{{/if}}">
+                <div class="d-flex justify-content-between align-items-center">
+                    
+                    <!-- Task Content -->
+                    <div class="d-flex align-items-center gap-3">
+                        {{#if ../isActive}}
+                        <a href="/action/toggle/{{id}}" class="text-decoration-none">
+                            <i class="fa-regular {{#if isCompleted}}fa-circle-check text-success{{else}}fa-circle text-muted{{/if}} fa-xl"></i>
+                        </a>
+                        {{/if}}
+                        
+                        <div>
+                            <h5 class="mb-0 {{#if isCompleted}}strikethrough{{/if}}">
+                                {{title}}
+                            </h5>
+                            <span class="meta-text">
+                                <i class="fa-regular fa-clock"></i> {{created_at}}
+                                {{#if is_draft}}<span class="badge bg-warning text-dark ms-1">Draft</span>{{/if}}
+                                {{#if subtaskCount}}
+                                    &bull; {{subtaskCount}} subtasks
+                                {{/if}}
+                            </span>
+                        </div>
+                    </div>
+
+                    <!-- Actions -->
+                    <div class="btn-group">
+                        {{#if ../isTrash}}
+                            <a href="/action/restore/{{id}}" class="btn btn-sm btn-outline-success" title="Restore"><i class="fa-solid fa-rotate-left"></i> Restore</a>
+                            <a href="/action/destroy/{{id}}" class="btn btn-sm btn-outline-danger" onclick="return confirm('Delete permanently?')" title="Delete Forever"><i class="fa-solid fa-fire"></i></a>
+                        {{/if}}
+                        
+                        {{#if ../isDrafts}}
+                            <a href="/action/publish/{{id}}" class="btn btn-sm btn-success" title="Publish"><i class="fa-solid fa-upload"></i> Publish</a>
+                            <a href="/action/delete/{{id}}" class="btn btn-sm btn-outline-secondary" title="Trash"><i class="fa-solid fa-trash"></i></a>
+                        {{/if}}
+
+                        {{#if ../isActive}}
+                            <a href="/action/delete/{{id}}" class="btn btn-sm btn-outline-secondary border-0" title="Move to Trash"><i class="fa-solid fa-trash"></i></a>
+                        {{/if}}
+                    </div>
+                </div>
+
+                <!-- Subtasks Section -->
+                {{#if ../isActive}}
+                <div class="subtasks-area">
+                    <!-- List Subtasks -->
+                    {{#each subtasks}}
+                    <div class="d-flex align-items-center mb-1 subtask-item">
+                        <a href="/subtask/toggle/{{sid}}" class="text-decoration-none me-2">
+                            <i class="fa-regular {{#if isSubCompleted}}fa-square-check text-primary{{else}}fa-square text-muted{{/if}}"></i>
+                        </a>
+                        <span class="{{#if isSubCompleted}}strikethrough{{/if}}">{{subtitle}}</span>
+                    </div>
+                    {{/each}}
+
+                    <!-- Add Subtask Form -->
+                    <form action="/subtask/add" method="POST" class="mt-2 d-flex align-items-center">
+                        <input type="hidden" name="parent_id" value="{{id}}">
+                        <i class="fa-solid fa-turn-up fa-rotate-90 text-muted me-2 small"></i>
+                        <input type="text" name="subtitle" class="form-control form-control-sm border-0 bg-transparent" placeholder="Add a step..." style="max-width: 200px;">
+                        <button type="submit" class="btn btn-sm btn-link text-decoration-none p-0 ms-1" style="color: #d63384;"><i class="fa-solid fa-plus"></i></button>
+                    </form>
+                </div>
+                {{/if}}
+
+            </div>
+            {{else}}
+            <div class="text-center py-5 text-muted">
+                <i class="fa-solid fa-clipboard-check fa-3x mb-3 opacity-25"></i>
+                <p>No tasks found.</p>
+            </div>
+            {{/each}}
+        </div>
+
+    </div>
+    <footer class="text-center mt-4 pb-4 text-muted small">
+        <p>&copy; 2026 ByteForceDB Technical Assessment by <strong>Newton Maina</strong>. Built with Java & Spark.</p>
+    </footer>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

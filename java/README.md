@@ -62,15 +62,30 @@ graph TD
 
 ---
 
-## Quick Start (Automated Setup)
-We provide batch scripts to verify the environment, build the project, and run it with a single click.
+## Quick Start (Two Modes)
 
-*   **Run**: Double-click `run.bat` (Compiles and starts the interactive CLI).
-    
-    ![Run Script](src/assets/java-run.png)
-    *The interactive CLI running in a Windows terminal.*
+ByteForceDB Java Edition now features both a high-performance CLI and a lightweight Web-based Demo.
 
-*   **Test**: Double-click `test.bat` (Runs the JUnit test suite).
+### 1. Interactive CLI (SQL Shell)
+Run the strictly-typed REPL to execute raw SQL commands.
+Double-click **`run.bat`** (or `mvn exec:java`).
+
+### 2. Web Interface (Task Manager Demo)
+Launch a full-stack Task Manager application built with **Spark Java**.
+Double-click **`web.bat`** (or `mvn compile exec:java -Dexec.mainClass="com.byteforce.web.WebApp"`).
+
+*   **Technology Stack**:
+    *   **Backend**: Spark Java (Micro-framework).
+    *   **Frontend**: Handlebars Templating (`.hbs`).
+    *   **Logic**: Direct SQL interaction with the ByteForceDB engine.
+
+#### Web Screenshots (Unified UI)
+
+![Main Page](../python/assets/web-main-page.png)
+*Figure 4: The active task list showing hierarchical data (Tasks & Subtasks).*
+
+![Drafts View](../python/assets/web-drafts.png)
+*Figure 5: The Drafts view for work-in-progress items.*
 
 ---
 
@@ -155,6 +170,33 @@ test.bat
 ```
 ![Test Output](src/assets/java-tests.png)
 *JUnit 5 test results verifying database functionality.*
+
+## Embedded API Usage
+
+You can use ByteForceDB directly in your Java applications as an embedded database.
+
+```java
+import com.byteforce.core.ByteForceDB;
+import com.byteforce.core.ExecutionResult;
+import java.util.Arrays;
+
+// 1. Initialize
+ByteForceDB db = new ByteForceDB("data");
+
+// 2. Execute DDL
+db.execute("CREATE TABLE sensors (id INTEGER PRIMARY KEY, value FLOAT)");
+
+// 3. Insert Data (with parameterized safety)
+db.execute("INSERT INTO sensors VALUES (?, ?)", Arrays.asList(1, 23.5));
+
+// 4. Query Data
+ExecutionResult result = db.execute("SELECT * FROM sensors WHERE value > 20");
+if (!result.isError()) {
+    result.getRows().forEach(row -> {
+        System.out.println("ID: " + row.get("id") + ", Value: " + row.get("value"));
+    });
+}
+```
 
 ---
 

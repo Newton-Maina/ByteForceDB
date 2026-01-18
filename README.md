@@ -109,19 +109,18 @@ cd python
 ### Quick Start
 ```bash
 cd java
-./run.bat  # Windows (Auto-compile & run)
+./run.bat  # Launch Interactive SQL Shell
 # or
-mvn clean install
-java -jar target/byteforce-db-1.0-SNAPSHOT-jar-with-dependencies.jar
+./web.bat  # Launch Web Task Manager Demo (Spark Java)
 ```
 
 ### Visuals
 
 ![Run](java/src/assets/java-run.png)
-*Figure 4: The Java CLI running the interactive shell with JLine.*
+*Figure 5: The Java CLI running the interactive shell with JLine.*
 
 ![Build](java/src/assets/java-build.png)
-*Figure 5: Maven build process compiling sources and generating the fat JAR.*
+*Figure 6: Maven build process compiling sources and generating the fat JAR.*
 
 ![Tests](java/src/assets/java-tests.png)
 *Figure 6: JUnit 5 test suite execution ensuring system stability.*
